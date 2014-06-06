@@ -16,6 +16,9 @@ import javax.swing.JTable;
 import com.michaelbaranov.microba.calendar.DatePicker;
 
 public class UsagePanel extends JPanel {
+	
+	public static int width = 800;
+	public static int height= 600;
 
 	private static final long serialVersionUID = -2195835028220798096L;
 
@@ -29,7 +32,7 @@ public class UsagePanel extends JPanel {
 
 		// 타이틀 라벨
 		JLabel titleLabel = new JLabel("실시간 사용 현황");
-		titleLabel.setBounds(450, 20, 100, 30);
+		titleLabel.setBounds(400 - 50, 20, 100, 30);
 		this.add(titleLabel);
 		
 		// 오늘의 라벨
@@ -38,7 +41,7 @@ public class UsagePanel extends JPanel {
 		String tempDate = sdFormat.format(nowDate);
 		
 		JLabel todayLabel = new JLabel(tempDate);
-		todayLabel.setBounds(500 + 300 - 50, 20, 100, 30);
+		todayLabel.setBounds(400 + 300 - 50, 20, 100, 30);
 		this.add(todayLabel);
 
 		/*
@@ -63,7 +66,7 @@ public class UsagePanel extends JPanel {
 		table.setFillsViewportHeight(true);
 		JScrollPane scrPane = new JScrollPane(table);
 		
-		scrPane.setBounds(30, 70, 600, 400);
+		scrPane.setBounds(30, 70, 700, 400);
 		this.add(scrPane);
 		
 		// 데이트 피커
