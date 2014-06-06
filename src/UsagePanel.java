@@ -79,7 +79,7 @@ public class UsagePanel extends JPanel {
 		this.add(comboBox);
 
 		{
-			String[] a = DBWrapper.getInstance().getSeminarRoomList()
+			String[] a = DBWrapper.getInstance().querySeminarRoomList()
 					.toArray(new String[0]);
 			comboBox.setModel(new DefaultComboBoxModel<String>(a));
 		}

@@ -1,4 +1,5 @@
 import java.util.Date;
+import java.util.Vector;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
@@ -46,23 +47,27 @@ public class ReservPanel extends JPanel {
 			phoneLabel.setBounds(30, 150, 70, 30);
 			this.add(phoneLabel);
 		}
-		
+
 		DatePicker datePicker = new DatePicker(new Date());
 		datePicker.setBounds(120, 30, 150, 25);
 		this.add(datePicker);
-		
+
 		JComboBox<String> resvTimes = new JComboBox<String>();
 		resvTimes.setBounds(120, 60, 150, 25);
 		this.add(resvTimes);
 		{
-			
+			Vector<String> times = new Vector<String>();
+			for (int i = 10; i <= 18; i++) {
+				times.add(i + " : 00");
+			}
+			resvTimes.setModel(new DefaultComboBoxModel<String>(times));
 		}
-		
+
 		JComboBox<String> seminarRooms = new JComboBox<String>();
 		seminarRooms.setBounds(120, 90, 150, 25);
 		this.add(seminarRooms);
 		{
-			String[] a = DBWrapper.getInstance().getSeminarRoomList()
+			String[] a = DBWrapper.getInstance().querySeminarRoomList()
 					.toArray(new String[0]);
 			seminarRooms.setModel(new DefaultComboBoxModel<String>(a));
 		}
@@ -96,5 +101,16 @@ public class ReservPanel extends JPanel {
 		
 		scrPane.setBounds(330, 60, 230, 120);
 		this.add(scrPane);
+		
+		//Buttons
+		JButton resv = new JButton("예약");
+		resv.setBounds(30, 200 - 10, 70, 30);
+		this.add(resv);
+		
+		/*
+		JButton cancel = new JButton("취소");
+		cancel.setBounds(330, 200, 70, 30);
+		this.add(cancel);
+		*/
 	}
 }
