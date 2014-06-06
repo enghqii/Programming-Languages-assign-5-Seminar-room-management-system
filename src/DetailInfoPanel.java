@@ -28,8 +28,7 @@ public class DetailInfoPanel extends JPanel {
 		this.add(nameLabel);
 
 		DateFormat sdFormat = new SimpleDateFormat("yyyy³â MM¿ù ddÀÏ");
-		Date nowDate = new Date();
-		String tempDate = sdFormat.format(nowDate);
+		String tempDate = sdFormat.format(date);
 		
 		JLabel theDay = new JLabel(tempDate);
 		theDay.setBounds(600 - 130, 10, 100, 30);

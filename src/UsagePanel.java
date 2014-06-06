@@ -21,6 +21,9 @@ public class UsagePanel extends JPanel {
 	public static int height = 600;
 
 	private static final long serialVersionUID = -2195835028220798096L;
+	
+	private DatePicker datePicker;
+	private JComboBox<String> comboBox;
 
 	public UsagePanel() {
 		initUI();
@@ -69,12 +72,12 @@ public class UsagePanel extends JPanel {
 		this.add(scrPane);
 
 		// 데이트 피커
-		DatePicker datePicker = new DatePicker(new Date());
+		datePicker = new DatePicker(new Date());
 		datePicker.setBounds(30, 500, 300, 25);
 		this.add(datePicker);
 
 		// 콤보박스
-		JComboBox<String> comboBox = new JComboBox<String>();
+		comboBox = new JComboBox<String>();
 		comboBox.setBounds(370, 500, 100, 25);
 		this.add(comboBox);
 
@@ -117,8 +120,11 @@ public class UsagePanel extends JPanel {
 		frame.setSize(DetailInfoPanel.width, DetailInfoPanel.height);
 		frame.setTitle("상세 정보 조회");
 		frame.setResizable(false);
+		
+		String slctd = comboBox.getSelectedItem().toString();
+		Date theDate = datePicker.getDate();
 
-		frame.add(new DetailInfoPanel("IT_101", new Date()));
+		frame.add(new DetailInfoPanel(slctd, theDate));
 
 		frame.setVisible(true);
 	}

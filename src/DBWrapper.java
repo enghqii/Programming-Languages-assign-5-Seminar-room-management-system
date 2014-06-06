@@ -3,7 +3,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 /* SINGLETON */
 public class DBWrapper {
@@ -31,6 +33,9 @@ public class DBWrapper {
 			System.exit(-1);
 		}
 	}
+
+	// for TIMESTAMP
+	private static SimpleDateFormat tsf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
 	private Connection conn = null;
 	private Statement stmt = null;
@@ -85,6 +90,31 @@ public class DBWrapper {
 			return null;
 		}
 
+	}
+
+	public void insertReservation(Date theDay, String rentalTime,
+			String roomName, String userName, String userPhoneNumber) throws Exception {
+		
+		if(userName.length() > 10){
+			Exception e = new Exception("User name is too long");
+			throw e;
+		}
+		
+		if(userPhoneNumber.matches("[0-9]{3}-[0-9]{4}-[0-9]{4}") == false){
+			Exception e = new Exception("wrong phone number format");
+			throw e;
+		}
+
+		String query = "insert into reservations VALUES ("
+				+ "'" + rentalTime + "'" + ","
+				+ "'" + roomName + "'" + ","
+				+ "'" + tsf.format(theDay) + "'" + ","
+				+ "'" + userName + "'" + ","
+				+ "'" + userPhoneNumber + "'" + ")";
+		
+		System.out.println(query);
+		
+		stmt.execute(query);
 	}
 
 }
