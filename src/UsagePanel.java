@@ -1,3 +1,5 @@
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -5,6 +7,7 @@ import java.util.Date;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
+import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -77,13 +80,52 @@ public class UsagePanel extends JPanel {
 		
 		// 상세 정보 조회
 		JButton detail = new JButton("상세 정보 조회");
-		detail.setBounds(500, 500, 100, 25);
+		detail.setBounds(500, 500, 120, 25);
+		detail.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				showDetailFrame();
+			}});
 		this.add(detail);
 		
 		// 사용자 예약
 		JButton reserv = new JButton("사용자 예약");
 		reserv.setBounds(650, 500, 100, 25);
+		reserv.addActionListener(new ActionListener(){
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				showReservFrame();
+				
+			}});
 		this.add(reserv);
+	}
+	
+	private void showDetailFrame(){
+		
+		JFrame frame = new JFrame();
+		
+		frame.setSize(DetailInfoPanel.width, DetailInfoPanel.height);
+		frame.setTitle("상세 정보 조회");
+		frame.setResizable(false);
+		
+		frame.add(new DetailInfoPanel("IT_101", new Date()));
+		
+		frame.setVisible(true);
+	}
+	
+	private void showReservFrame(){
+		
+		JFrame frame = new JFrame();
+		
+		frame.setSize(ReservPanel.width,ReservPanel.height);
+		frame.setTitle("사용자 예약");
+		frame.setResizable(false);
+
+		frame.add(new ReservPanel());
+		
+		frame.setVisible(true);
 	}
 
 }
