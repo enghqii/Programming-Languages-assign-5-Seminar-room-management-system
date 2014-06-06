@@ -1,5 +1,6 @@
 import java.util.Date;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
@@ -53,10 +54,18 @@ public class ReservPanel extends JPanel {
 		JComboBox<String> resvTimes = new JComboBox<String>();
 		resvTimes.setBounds(120, 60, 150, 25);
 		this.add(resvTimes);
+		{
+			
+		}
 		
 		JComboBox<String> seminarRooms = new JComboBox<String>();
 		seminarRooms.setBounds(120, 90, 150, 25);
 		this.add(seminarRooms);
+		{
+			String[] a = DBWrapper.getInstance().getSeminarRoomList()
+					.toArray(new String[0]);
+			seminarRooms.setModel(new DefaultComboBoxModel<String>(a));
+		}
 		
 		JTextField nameField = new JTextField();
 		nameField.setBounds(120, 120, 150, 25);
