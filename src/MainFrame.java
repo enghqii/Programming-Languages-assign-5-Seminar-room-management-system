@@ -1,28 +1,23 @@
-import java.awt.GraphicsConfiguration;
 import java.awt.HeadlessException;
 
 import javax.swing.JFrame;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
 
 
 public class MainFrame extends JFrame {
+	
+	private static final long serialVersionUID = 2269971701250845501L;
 
 	public MainFrame() throws HeadlessException {
-		// TODO Auto-generated constructor stub
-	}
-
-	public MainFrame(GraphicsConfiguration arg0) {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
-
-	public MainFrame(String arg0) throws HeadlessException {
-		super(arg0);
-		// TODO Auto-generated constructor stub
-	}
-
-	public MainFrame(String arg0, GraphicsConfiguration arg1) {
-		super(arg0, arg1);
-		// TODO Auto-generated constructor stub
+		
+		this.setSize(1000, 600);
+		this.setTitle("예약 및 사용현황");
+		this.setResizable(false);
+		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		
+		this.add(new UsagePanel());
+		
 	}
 
 }
