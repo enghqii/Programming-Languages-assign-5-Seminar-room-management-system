@@ -6,6 +6,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 
 public class DetailInfoPanel extends JPanel {
@@ -14,6 +15,8 @@ public class DetailInfoPanel extends JPanel {
 	public static final int height= 400;
 	
 	private static final long serialVersionUID = 6584784002346447677L;
+	
+	private DefaultTableModel detailTableModel;
 
 	public DetailInfoPanel(String roomName, Date date) {
 		
@@ -34,11 +37,13 @@ public class DetailInfoPanel extends JPanel {
 		theDay.setBounds(600 - 130, 10, 100, 30);
 		this.add(theDay);
 		
-		Object rowData[][] = {
-				{ "Row1-Column1", "Row1-Column2"},
-				{ "Row2-Column1", "Row2-Column2"} };
-		Object columnNames[] = { "Column One", "Column Two" };
-		JTable table = new JTable(rowData, columnNames);
+		detailTableModel = new DefaultTableModel();
+
+		detailTableModel.addColumn("시간");
+		detailTableModel.addColumn("사용현황");
+		detailTableModel.addColumn("이름");
+		detailTableModel.addColumn("연락처");
+		JTable table = new JTable(detailTableModel);
 
 		table.setFillsViewportHeight(true);
 		JScrollPane scrPane = new JScrollPane(table);

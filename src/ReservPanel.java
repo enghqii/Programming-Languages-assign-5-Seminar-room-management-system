@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 
 import com.michaelbaranov.microba.calendar.DatePicker;
 
@@ -27,6 +28,8 @@ public class ReservPanel extends JPanel {
 	private JComboBox<String> seminarRooms;
 	private JTextField nameField;
 	private JTextField phoneField;
+	
+	private DefaultTableModel availRoomTableModel;
 
 	public ReservPanel() {
 		initUI();
@@ -100,9 +103,10 @@ public class ReservPanel extends JPanel {
 		this.add(stopInquiry);
 
 		// TABLE
-		Object rowData[][] = { { "Row1-Column1", }, { "Row2-Column1", } };
-		Object columnNames[] = { "Column One" };
-		JTable table = new JTable(rowData, columnNames);
+		availRoomTableModel = new DefaultTableModel();
+		
+		availRoomTableModel.addColumn("세미나 실");
+		JTable table = new JTable(availRoomTableModel);
 
 		table.setFillsViewportHeight(true);
 		JScrollPane scrPane = new JScrollPane(table);

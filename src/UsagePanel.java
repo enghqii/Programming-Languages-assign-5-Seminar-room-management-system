@@ -12,6 +12,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.table.DefaultTableModel;
 
 import com.michaelbaranov.microba.calendar.DatePicker;
 
@@ -24,6 +25,8 @@ public class UsagePanel extends JPanel {
 	
 	private DatePicker datePicker;
 	private JComboBox<String> comboBox;
+	
+	private DefaultTableModel usageTableModel;
 
 	public UsagePanel() {
 		initUI();
@@ -60,10 +63,15 @@ public class UsagePanel extends JPanel {
 		 */
 
 		// 사용현황 테이블
-		Object rowData[][] = { { "Row1-Column1", "Row1-Column2" },
-				{ "Row2-Column1", "Row2-Column2" } };
-		Object columnNames[] = { "Column One", "Column Two" };
-		JTable table = new JTable(rowData, columnNames);
+		JTable table = new JTable();
+		
+		usageTableModel = new DefaultTableModel();
+		usageTableModel.addColumn("세미나 실");
+		usageTableModel.addColumn("사용 현황");
+		
+		usageTableModel.addRow(new String[]{"IT-101","available"});
+		usageTableModel.addRow(new String[]{"IT-102","available"});
+		table.setModel(usageTableModel);
 
 		table.setFillsViewportHeight(true);
 		JScrollPane scrPane = new JScrollPane(table);

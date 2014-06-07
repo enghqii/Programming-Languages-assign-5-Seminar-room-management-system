@@ -105,16 +105,22 @@ public class DBWrapper {
 			throw e;
 		}
 
-		String query = "insert into reservations VALUES ("
-				+ "'" + rentalTime + "'" + ","
-				+ "'" + roomName + "'" + ","
-				+ "'" + tsf.format(theDay) + "'" + ","
-				+ "'" + userName + "'" + ","
+		String query = "insert into reservations VALUES (" + "'" + rentalTime
+				+ "'" + "," + "'" + roomName + "'" + "," + "'"
+				+ tsf.format(theDay) + "'" + "," + "'" + userName + "'" + ","
 				+ "'" + userPhoneNumber + "'" + ")";
-		
+
 		System.out.println(query);
-		
+
 		stmt.execute(query);
+	}
+
+	public void searchAvailableRoom(Date date, String rentalTime) {
+		//ArrayList<String> roomList = querySeminarRoomList();
+
+		//for (String roomName : roomList) {
+		//	String query = "select * from reservations where"
+		//}
 	}
 
 }
