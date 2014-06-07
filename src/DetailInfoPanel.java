@@ -51,4 +51,8 @@ public class DetailInfoPanel extends JPanel {
 		scrPane.setBounds(30, 50, 540, 300);
 		this.add(scrPane);
 	}
+	
+	private void updateDetail(){
+		detailTableModel.setRowCount(0);
+	}
 }

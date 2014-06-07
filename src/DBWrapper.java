@@ -7,6 +7,8 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.JOptionPane;
+
 /* SINGLETON */
 public class DBWrapper {
 
@@ -35,7 +37,7 @@ public class DBWrapper {
 	}
 
 	// for TIMESTAMP
-	private static SimpleDateFormat tsf = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+	private static SimpleDateFormat tsf = new java.text.SimpleDateFormat("yyyy-MM-dd 00:00:00");
 
 	private Connection conn = null;
 	private Statement stmt = null;
@@ -105,9 +107,10 @@ public class DBWrapper {
 			throw e;
 		}
 
-		String query = "insert into reservations VALUES (" + "'" + rentalTime
-				+ "'" + "," + "'" + roomName + "'" + "," + "'"
-				+ tsf.format(theDay) + "'" + "," + "'" + userName + "'" + ","
+		String query = "insert into reservations VALUES (" 
+				+ "'" + rentalTime + "'" + "," 
+				+ "'" + roomName + "'" + "," 
+				+ "'" + tsf.format(theDay) + "'" + "," + "'" + userName + "'" + ","
 				+ "'" + userPhoneNumber + "'" + ")";
 
 		System.out.println(query);
@@ -115,12 +118,75 @@ public class DBWrapper {
 		stmt.execute(query);
 	}
 
-	public void searchAvailableRoom(Date date, String rentalTime) {
-		//ArrayList<String> roomList = querySeminarRoomList();
+	public ArrayList<String> searchAvailableRoom(Date date, String rentalTime) {
 
-		//for (String roomName : roomList) {
-		//	String query = "select * from reservations where"
-		//}
+		ArrayList<String> roomList = querySeminarRoomList();
+		ArrayList<String> availRoomList = new ArrayList<String>();
+
+		for (String roomName : roomList) {
+
+			try {
+
+				String query = "select * from reservations where ";
+				query += "room_name == '" + roomName + "'";
+				query += " and ";
+				query += "rental_time == '" + rentalTime + "'";
+				query += " and ";
+				query += "date ==  '" + tsf.format(date) + "'";
+
+				ResultSet rs = stmt.executeQuery(query);
+
+				if (!rs.next()) {
+					availRoomList.add(roomName);
+				}
+
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage());
+			}
+
+		}
+
+		return availRoomList;
+	}
+
+	public ArrayList<Boolean> queryNowUsage(Date date) {
+
+		ArrayList<String> roomList = querySeminarRoomList();
+
+		SimpleDateFormat sf = new java.text.SimpleDateFormat("hh:00");
+		String rentalTime = sf.format(date);
+		
+		ArrayList<Boolean> usages = new ArrayList<Boolean>();
+
+		for (String roomName : roomList) {
+
+			try {
+				String query = "select * from reservations where ";
+				query += "room_name == '" + roomName + "'";
+				query += " and ";
+				query += "rental_time == '" + rentalTime + "'";
+				query += " and ";
+				query += "date ==  '" + tsf.format(date) + "'";
+
+				ResultSet rs = stmt.executeQuery(query);
+				
+				if(!rs.next()){
+					usages.add(true); // available
+				}else{
+					usages.add(false); // using
+				}
+				
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, e.getMessage());
+			}
+
+		}
+		
+		return usages;
+	}
+	
+	public void querySeminarRoomDetail(){
+		
 	}
 
 }

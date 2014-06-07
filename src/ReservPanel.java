@@ -1,5 +1,8 @@
+
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
 
@@ -96,6 +99,13 @@ public class ReservPanel extends JPanel {
 
 		JButton startInquiry = new JButton("조회시작");
 		startInquiry.setBounds(330, 30, 100, 25);
+		startInquiry.addActionListener(new ActionListener() {
+			
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				availRoomTest001();
+			}
+		});
 		this.add(startInquiry);
 
 		JButton stopInquiry = new JButton("조회종료");
@@ -146,6 +156,24 @@ public class ReservPanel extends JPanel {
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, e.getMessage());
+		}
+	}
+	
+	private void availRoomTest001(){
+		
+		Date theDay = datePicker.getDate();
+		String rentalTime = resvTimes.getSelectedItem().toString();
+
+		ArrayList<String> avails = DBWrapper.getInstance().searchAvailableRoom(
+				theDay, rentalTime);
+
+		// clear the model
+		availRoomTableModel.setRowCount(0);
+		
+		for(String roomName : avails){
+			String[] strarr = new String[1];
+			strarr[0] = roomName;
+			availRoomTableModel.addRow(strarr);
 		}
 	}
 }

@@ -2,6 +2,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.DefaultComboBoxModel;
@@ -50,18 +51,6 @@ public class UsagePanel extends JPanel {
 		todayLabel.setBounds(400 + 300 - 50, 20, 100, 30);
 		this.add(todayLabel);
 
-		/*
-		 * JTable roomList = new JTable(); TableColumnModel columnModel = new
-		 * DefaultTableColumnModel(); TableColumn col = new TableColumn();
-		 * col.setHeaderValue("asdf"); columnModel.addColumn(col);
-		 * 
-		 * col = new TableColumn(); col.setHeaderValue("qwer");
-		 * columnModel.addColumn(col);
-		 * 
-		 * roomList.setColumnModel(columnModel); //roomList.setBounds(0, 0, 600,
-		 * 400);
-		 */
-
 		// 사용현황 테이블
 		JTable table = new JTable();
 		
@@ -69,8 +58,7 @@ public class UsagePanel extends JPanel {
 		usageTableModel.addColumn("세미나 실");
 		usageTableModel.addColumn("사용 현황");
 		
-		usageTableModel.addRow(new String[]{"IT-101","available"});
-		usageTableModel.addRow(new String[]{"IT-102","available"});
+		updateUsageTable();
 		table.setModel(usageTableModel);
 
 		table.setFillsViewportHeight(true);
@@ -148,6 +136,26 @@ public class UsagePanel extends JPanel {
 		frame.add(new ReservPanel());
 
 		frame.setVisible(true);
+	}
+	
+	private void updateUsageTable(){
+		
+		usageTableModel.setRowCount(0);
+		
+		ArrayList<String> roomList = DBWrapper.getInstance().querySeminarRoomList();
+		ArrayList<Boolean> usages = DBWrapper.getInstance().queryNowUsage(new Date());
+		
+		int l = roomList.size();
+
+		for (int i = 0; i < l; i++) {
+
+			String[] strarr = new String[2];
+			strarr[0] = roomList.get(i);
+			strarr[1] = usages.get(i) ? "Available" : "Using";
+
+			usageTableModel.addRow(strarr);
+		}
+
 	}
 
 }
