@@ -17,13 +17,18 @@ public class DetailInfoPanel extends JPanel {
 	private static final long serialVersionUID = 6584784002346447677L;
 	
 	private DefaultTableModel detailTableModel;
+	
+	private String roomName;
+	private Date date;
 
 	public DetailInfoPanel(String roomName, Date date) {
+		this.roomName 	= roomName;
+		this.date 		= date;
 		
-		initUI(roomName, date);
+		initUI();
 	}
 
-	private void initUI(String roomName, Date date){
+	private void initUI(){
 		setLayout(null);
 		
 		JLabel nameLabel = new JLabel(roomName);
@@ -44,6 +49,7 @@ public class DetailInfoPanel extends JPanel {
 		detailTableModel.addColumn("이름");
 		detailTableModel.addColumn("연락처");
 		JTable table = new JTable(detailTableModel);
+		updateDetail();
 
 		table.setFillsViewportHeight(true);
 		JScrollPane scrPane = new JScrollPane(table);
@@ -54,5 +60,18 @@ public class DetailInfoPanel extends JPanel {
 	
 	private void updateDetail(){
 		detailTableModel.setRowCount(0);
+		
+		DBWrapper.getInstance().querySeminarRoomDetail(roomName, date);
+
+		for (int i = 10; i <= 18; i++) {
+			
+			String[] detail = new String[4];
+			detail[0] = i+":00";
+			detail[1] = "";
+			detail[2] = "";
+			detail[3] = "";
+			
+			detailTableModel.addRow(detail);
+		}
 	}
 }

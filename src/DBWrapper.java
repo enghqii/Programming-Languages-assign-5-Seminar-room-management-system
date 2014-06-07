@@ -184,9 +184,23 @@ public class DBWrapper {
 		
 		return usages;
 	}
-	
-	public void querySeminarRoomDetail(){
+
+	public void querySeminarRoomDetail(String roomName, Date date) {
 		
+		try {
+			String query = "select * from reservations where ";
+			query += "room_name == '" + roomName + "'";
+			query += " and ";
+			query += "date ==  '" + tsf.format(date) + "'";
+
+			ResultSet rs = stmt.executeQuery(query);
+			
+			while(rs.next()){
+				
+			}
+			
+		} catch (SQLException e) {
+		}
 	}
 
 }
