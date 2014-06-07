@@ -185,9 +185,12 @@ public class DBWrapper {
 		return usages;
 	}
 
-	public void querySeminarRoomDetail(String roomName, Date date) {
+	public ArrayList<String[]> querySeminarRoomDetail(String roomName, Date date) {
 		
 		try {
+			
+			ArrayList<String[]> resvs = new ArrayList<String[]>();
+			
 			String query = "select * from reservations where ";
 			query += "room_name == '" + roomName + "'";
 			query += " and ";
@@ -196,11 +199,23 @@ public class DBWrapper {
 			ResultSet rs = stmt.executeQuery(query);
 			
 			while(rs.next()){
+				String[] detail = new String[4];
+
+				detail[0] = rs.getString("rental_time");
+				detail[1] = "Reserved";
+				detail[2] = rs.getString("user_name");
+				detail[3] = rs.getString("phone_number");
 				
+				resvs.add(detail);
 			}
 			
+			return resvs;
+			
 		} catch (SQLException e) {
+			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
+		
+		return null;
 	}
 
 }

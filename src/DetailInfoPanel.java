@@ -1,5 +1,6 @@
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import javax.swing.JLabel;
@@ -61,15 +62,24 @@ public class DetailInfoPanel extends JPanel {
 	private void updateDetail(){
 		detailTableModel.setRowCount(0);
 		
-		DBWrapper.getInstance().querySeminarRoomDetail(roomName, date);
+		ArrayList<String[]> resvs = DBWrapper.getInstance().querySeminarRoomDetail(roomName, date);
 
 		for (int i = 10; i <= 18; i++) {
 			
 			String[] detail = new String[4];
+			
 			detail[0] = i+":00";
 			detail[1] = "";
 			detail[2] = "";
 			detail[3] = "";
+			
+			for(String[] det : resvs){
+				if(det[0].compareTo(detail[0]) == 0){
+					detail[1] = det[1];
+					detail[2] = det[2];
+					detail[3] = det[3];
+				}
+			}
 			
 			detailTableModel.addRow(detail);
 		}
