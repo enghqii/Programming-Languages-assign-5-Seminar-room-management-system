@@ -34,6 +34,8 @@ public class ReservPanel extends JPanel {
 	
 	private DefaultTableModel availRoomTableModel;
 
+	private Thread inqueryThread = null;
+
 	public ReservPanel() {
 		initUI();
 	}
@@ -100,16 +102,51 @@ public class ReservPanel extends JPanel {
 		JButton startInquiry = new JButton("조회시작");
 		startInquiry.setBounds(330, 30, 100, 25);
 		startInquiry.addActionListener(new ActionListener() {
-			
+
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				getAvailRoom();
+				// inquery thread start.
+
+				if (inqueryThread == null) {
+
+					inqueryThread = new Thread() {
+						@Override
+						public void run() {
+
+							while (!this.isInterrupted()) {
+
+								getAvailRoom();
+
+								try {
+									Thread.sleep(1000);
+								} catch (InterruptedException e) {
+									break;
+								}
+							}
+						}
+					};
+					inqueryThread.start();
+				}
 			}
 		});
 		this.add(startInquiry);
 
 		JButton stopInquiry = new JButton("조회종료");
 		stopInquiry.setBounds(460, 30, 100, 25);
+		stopInquiry.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				// inquery thread stop.
+				try {
+					inqueryThread.interrupt();
+					inqueryThread.join();
+					inqueryThread = null;
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		});
 		this.add(stopInquiry);
 
 		// TABLE
@@ -131,35 +168,64 @@ public class ReservPanel extends JPanel {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					makeReservation();
-				} catch (Exception e) {
-					e.printStackTrace();
-					JOptionPane.showMessageDialog(null, e.getMessage());
-				}
+
+				Thread t = new Thread() {
+					@Override
+					public void run() {
+
+						try {
+							Thread.sleep(2000);
+						} catch (InterruptedException e1) {
+							e1.printStackTrace();
+						}
+
+						try {
+							makeReservation();
+						} catch (Exception e) {
+							e.printStackTrace();
+							JOptionPane.showMessageDialog(null, e.getMessage());
+						}
+
+					}
+				};
+				t.start();
 			}
 		});
 		this.add(resv);
 
 		JButton resvCancel = new JButton("예약취소");
-		resvCancel.setBounds(30 + 540/2, 200 - 10, 540 / 2, 30);
+		resvCancel.setBounds(30 + 540 / 2, 200 - 10, 540 / 2, 30);
 		resvCancel.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				try {
-					cancelReservation();
-				} catch (Exception e) {
-					e.printStackTrace();
-					JOptionPane.showMessageDialog(null, e.getMessage());
-				}
+
+				Thread t = new Thread() {
+					@Override
+					public void run() {
+
+						try {
+							Thread.sleep(2000);
+						} catch (InterruptedException e1) {
+							e1.printStackTrace();
+						}
+
+						try {
+							cancelReservation();
+						} catch (Exception e) {
+							e.printStackTrace();
+							JOptionPane.showMessageDialog(null, e.getMessage());
+						}
+					}
+				};
+				t.start();
 			}
 		});
 		this.add(resvCancel);
 	}
 
-	private void makeReservation() throws Exception {
-		
+	private synchronized void makeReservation() throws Exception {
+
 		Date theDay = datePicker.getDate();
 		
 		if(theDay.before(new Date())){
@@ -188,7 +254,7 @@ public class ReservPanel extends JPanel {
 		}
 	}
 
-	private void cancelReservation() throws Exception {
+	private synchronized void cancelReservation() throws Exception {
 
 		Date theDay = datePicker.getDate();
 
@@ -210,7 +276,7 @@ public class ReservPanel extends JPanel {
 		}
 	}
 	
-	private void getAvailRoom(){
+	private synchronized void getAvailRoom(){
 		
 		Date theDay = datePicker.getDate();
 		String rentalTime = resvTimes.getSelectedItem().toString();
