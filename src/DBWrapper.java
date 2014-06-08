@@ -49,7 +49,7 @@ public class DBWrapper {
 	private void openDB() {
 
 		try {
-			conn = DriverManager.getConnection("jdbc:sqlite:sample.db");
+			conn = DriverManager.getConnection("jdbc:sqlite:seminar.db");
 			stmt = conn.createStatement();
 			stmt.setQueryTimeout(5); // maxima timeout is 5 sec;
 
@@ -116,6 +116,37 @@ public class DBWrapper {
 		System.out.println(query);
 
 		stmt.execute(query);
+	}
+	
+	public void cancelReservation(Date theDay, String rentalTime,
+			String roomName, String userName, String userPhoneNumber) throws Exception {
+		
+		if(userName.length() > 10){
+			Exception e = new Exception("User name is too long");
+			throw e;
+		}
+		
+		if(userPhoneNumber.matches("[0-9]{3}-[0-9]{4}-[0-9]{4}") == false){
+			Exception e = new Exception("wrong phone number format");
+			throw e;
+		}
+		String selectQuery = "select * from reservations";
+		String deleteQuery = "delete from reservations";
+		String where =  " where " 
+				+ "rental_time == '" + rentalTime + "'" + " and " 
+				+ "room_name == '" + roomName + "'" + " and " 
+				+ "date == '" + tsf.format(theDay) + "'" + " and " 
+				+ "user_name == '" + userName + "'" + " and "
+				+ "phone_number =='" + userPhoneNumber + "'";
+
+		ResultSet rs = stmt.executeQuery(selectQuery + where);
+		
+		if(!rs.next()){
+			throw new Exception("No reservation matches");
+		}
+		
+		System.out.println(deleteQuery + where);
+		stmt.execute(deleteQuery + where);
 	}
 
 	public ArrayList<String> searchAvailableRoom(Date date, String rentalTime) {

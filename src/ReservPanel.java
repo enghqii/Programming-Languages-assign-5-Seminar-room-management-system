@@ -103,7 +103,7 @@ public class ReservPanel extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				availRoomTest001();
+				getAvailRoom();
 			}
 		});
 		this.add(startInquiry);
@@ -126,40 +126,91 @@ public class ReservPanel extends JPanel {
 
 		// Buttons
 		JButton resv = new JButton("예약");
-		resv.setBounds(30, 200 - 10, 600 - 60, 30);
+		resv.setBounds(30, 200 - 10, 540 / 2, 30);
 		resv.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				makeReservation();
+				try {
+					makeReservation();
+				} catch (Exception e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				}
 			}
 		});
 		this.add(resv);
 
-		/*
-		 * JButton cancel = new JButton("취소"); cancel.setBounds(330, 200, 70,
-		 * 30); this.add(cancel);
-		 */
+		JButton resvCancel = new JButton("예약취소");
+		resvCancel.setBounds(30 + 540/2, 200 - 10, 540 / 2, 30);
+		resvCancel.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				try {
+					cancelReservation();
+				} catch (Exception e) {
+					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e.getMessage());
+				}
+			}
+		});
+		this.add(resvCancel);
 	}
 
-	private void makeReservation() {
+	private void makeReservation() throws Exception {
 		
 		Date theDay = datePicker.getDate();
+		
+		if(theDay.before(new Date())){
+			Exception e = new Exception("Time paradox.");
+			throw e;
+		}
+		
+		String rentalTime = resvTimes.getSelectedItem().toString();
+		String seminarRoomName = seminarRooms.getSelectedItem().toString();
+		String name = nameField.getText();
+		String phoneNumberStr = phoneField.getText();
+
+		ArrayList<String> avails = DBWrapper.getInstance().searchAvailableRoom(theDay, rentalTime);
+		
+		if (avails.contains(seminarRoomName)) {
+
+			try {
+				DBWrapper.getInstance().insertReservation(theDay, rentalTime, seminarRoomName, name, phoneNumberStr);
+			} catch (Exception e) {
+				e.printStackTrace();
+				JOptionPane.showMessageDialog(null, e.getMessage());
+			}
+			
+		} else {
+			throw new Exception("Not available");
+		}
+	}
+
+	private void cancelReservation() throws Exception {
+
+		Date theDay = datePicker.getDate();
+
+		if (theDay.before(new Date())) {
+			Exception e = new Exception("Time paradox.");
+			throw e;
+		}
+		
 		String rentalTime = resvTimes.getSelectedItem().toString();
 		String seminarRoomName = seminarRooms.getSelectedItem().toString();
 		String name = nameField.getText();
 		String phoneNumberStr = phoneField.getText();
 
 		try {
-			DBWrapper.getInstance().insertReservation(theDay, rentalTime,
-					seminarRoomName, name, phoneNumberStr);
+			DBWrapper.getInstance().cancelReservation(theDay, rentalTime, seminarRoomName, name, phoneNumberStr);
 		} catch (Exception e) {
 			e.printStackTrace();
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
 	
-	private void availRoomTest001(){
+	private void getAvailRoom(){
 		
 		Date theDay = datePicker.getDate();
 		String rentalTime = resvTimes.getSelectedItem().toString();
