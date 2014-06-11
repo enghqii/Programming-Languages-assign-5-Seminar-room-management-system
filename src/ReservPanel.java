@@ -2,6 +2,8 @@
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Vector;
@@ -226,9 +228,12 @@ public class ReservPanel extends JPanel {
 
 	private synchronized void makeReservation() throws Exception {
 
-		Date theDay = datePicker.getDate();
+		DateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
-		if(theDay.before(new Date())){
+		Date theDay = datePicker.getDate();
+		Date toDay = sdFormat.parse(sdFormat.format(new Date()));
+		
+		if(theDay.before(toDay)){
 			Exception e = new Exception("Time paradox.");
 			throw e;
 		}
@@ -256,9 +261,12 @@ public class ReservPanel extends JPanel {
 
 	private synchronized void cancelReservation() throws Exception {
 
+		DateFormat sdFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
 		Date theDay = datePicker.getDate();
+		Date toDay = sdFormat.parse(sdFormat.format(new Date()));
 
-		if (theDay.before(new Date())) {
+		if (theDay.before(toDay)) {
 			Exception e = new Exception("Time paradox.");
 			throw e;
 		}
